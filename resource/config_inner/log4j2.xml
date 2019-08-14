@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Don't forget to set system property -DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector 
+	to make all loggers asynchronous. http://logging.apache.org/log4j/2.x/manual/async.html -->
+<!--To use the JDK Logging Adapter, you must set the system property java.util.logging.manager 
+	to org.apache.logging.log4j.jul.LogManager -Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager -->
+
+<Configuration status="debug" monitorInterval="30">
+	<properties>
+		<!--<property name="dir">${sys:approot}/logs</property> -->
+		<property name="dir">./logs</property>
+		<property name="filename">TPublic.log</property>
+		<property name="errorFile">TPublic_error.log</property>
+		<property name="filePattern">log%d{yyyyMMdd}.log</property>
+		<property name="filePatternError">logErr%d{yyyyMMdd}.log</property>
+		<property name="layout1">%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level
+			%logger{36} - %msg%n</property>
+		<property name="layout2">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level
+			%logger{36} - %msg%n</property>
+		<property name="layout3">[%t] %-5level - %msg%n</property>
+	</properties>
+
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="${layout3}" />
+		</Console>
+
+		<RollingRandomAccessFile
+			name="RollingRandomAccessFile" fileName="${dir}/${filename}"
+			filePattern="${dir}/${filePattern}">
+			<PatternLayout pattern="${layout1}" />
+			<Policies>
+				<!-- 每24小时更新一次,也就是说隔天生成日志文件 -->
+				<TimeBasedTriggeringPolicy modulate="true"
+					interval="1" />
+				<SizeBasedTriggeringPolicy size="1000 MB" />
+			</Policies>
+			<!-- 保留最近的文件个数 -->
+			<DefaultRolloverStrategy max="30" />
+		</RollingRandomAccessFile>
+
+		<RollingRandomAccessFile
+			name="RollErrorRandomFile" fileName="${dir}/${errorFile}"
+			filePattern="${dir}/${filePatternError}">
+			<LevelRangeFilter />
+			<PatternLayout pattern="${layout1}" />
+			<Policies>
+				<!-- 每24小时更新一次,也就是说隔天生成日志文件 -->
+				<TimeBasedTriggeringPolicy modulate="true"
+					interval="1" />
+				<SizeBasedTriggeringPolicy size="1000 MB" />
+			</Policies>
+			<!-- 保留最近的文件个数 -->
+			<DefaultRolloverStrategy max="30" />
+		</RollingRandomAccessFile>
+
+	</Appenders>
+
+	<Loggers>
+		<Logger name="io.vertx.core" level="DEBUG">
+			<!-- <AppenderRef ref="vertx_rollingFile" /> -->
+			<!-- <AppenderRef ref="vertx_socket" /> -->
+			<AppenderRef ref="RollingRandomAccessFile" />
+			<AppenderRef ref="RollErrorRandomFile" />
+		</Logger>
+
+
+		<!-- <Logger name="test" level="debug"> -->
+		<!-- </Logger> -->
+		<!-- <Logger name="com.teoyoo.game" level="debug"> -->
+		<!-- </Logger> -->
+
+		<!-- <Root level="debug"> -->
+		<!-- <AppenderRef ref="Console" /> -->
+		<!-- <AppenderRef ref="RollingRandomAccessFile" /> -->
+		<!-- <AppenderRef ref="RollErrorRandomFile" /> -->
+		<!-- </Root> -->
+	</Loggers>
+</Configuration>

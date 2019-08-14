@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quartz>
+<!-- 计划任务 -->
+<!--
+
+	<job>
+		<job-detail>
+			<name>ActiveSMSServiceJob</name>
+			<group>DEFAULT</group>
+			<description>每天0点发送一条短信，激活短信收发服务</description>
+			<job-class>com.hs.ddz.job.ActiveSMSServiceJob</job-class>
+			<volatility>false</volatility>
+			<durability>false</durability>
+			<recover>false</recover>
+		</job-detail>
+		<trigger>
+			<cron>
+				<name>ActiveSMSServiceTrigger</name>
+				<group>DEFAULT</group>
+				<job-name>ActiveSMSServiceJob</job-name>
+				<job-group>DEFAULT</job-group>
+				<cron-expression>0 0 0  * * ?</cron-expression>
+			</cron>
+		</trigger>
+	</job>
+	
+
+	<job>
+		<job-detail>
+			<name>ResetPlayerDataJob</name>
+			<group>DEFAULT</group>
+			<description>每天0点重置在线玩家数据</description>
+			<job-class>com.hs.ddz.job.ResetPlayerDataJob</job-class>
+			<volatility>false</volatility>
+			<durability>false</durability>
+			<recover>false</recover>
+		</job-detail>
+		<trigger>
+			<cron>
+				<name>ResetPlayerDataTrigger</name>
+				<group>DEFAULT</group>
+				<job-name>ResetPlayerDataJob</job-name>
+				<job-group>DEFAULT</job-group>
+				<cron-expression>0 0 0 * * ?</cron-expression>
+			</cron>
+		</trigger>
+	</job>
+
+		<job>
+		<job-detail>
+			<name>RefreshRankJob</name>
+			<group>DEFAULT</group>
+			<description>每天4点刷新排行榜</description>
+			<job-class>com.hs.ddz.job.RefreshRankJob</job-class>
+			<volatility>false</volatility>
+			<durability>false</durability>
+			<recover>false</recover>
+		</job-detail>
+		<trigger>
+			<cron>
+				<name>RefreshRankJobTrigger</name>
+				<group>DEFAULT</group>
+				<job-name>RefreshRankJob</job-name>
+				<job-group>DEFAULT</job-group>
+				<cron-expression>0 0 4 * * ?</cron-expression>
+			</cron>
+		</trigger>
+	</job>
+	-->
+</quartz>
