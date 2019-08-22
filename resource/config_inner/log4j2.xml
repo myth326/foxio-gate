@@ -57,18 +57,11 @@
 	</Appenders>
 
 	<Loggers>
-		<Logger name="io.vertx.core" level="DEBUG">
-			<!-- <AppenderRef ref="vertx_rollingFile" /> -->
-			<!-- <AppenderRef ref="vertx_socket" /> -->
+		<Logger name="io.vertx.core" level="INFO">
 			<AppenderRef ref="RollingRandomAccessFile" />
 			<AppenderRef ref="RollErrorRandomFile" />
 		</Logger>
 
-
-		<!-- <Logger name="test" level="debug"> -->
-		<!-- </Logger> -->
-		<!-- <Logger name="com.teoyoo.game" level="debug"> -->
-		<!-- </Logger> -->
 
 		<!-- <Root level="debug"> -->
 		<!-- <AppenderRef ref="Console" /> -->

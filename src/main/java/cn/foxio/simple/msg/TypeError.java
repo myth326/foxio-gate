@@ -104,6 +104,14 @@ public class TypeError {
 	
 	
 	
+	static public final SystemError MATCH_FAILE = new SystemError(401, "匹配失败");
+
+	static public final SystemError NOT_FIND_TABLE = new SystemError(402, "亲，该房间已经关闭了哦~");
+
+	static public final SystemError TABLE_STOP = new SystemError(403, "亲，该房间已经停止游戏了，换个房间试试吧~");
+
+	
+	
 
 
 }
