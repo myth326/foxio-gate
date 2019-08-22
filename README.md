@@ -1,7 +1,11 @@
 # foxio-gate
 一个基于netty的tcp网关. 整合springBoot,支持socket/websocket. 分布式集群游戏框架.<br/>
 
- 通讯方式<br/>
+
+环境要求： jdk1.8+ 注意不能用 jre <br/>
+
+
+ 通讯方式：<br/>
 	1 启动网关与子服，无顺序关系<br/>
 	2 子服订阅相关消息<br/>
 	3 当网关收到消息后，识别主题，将相应消息发送给订阅者<br/>
