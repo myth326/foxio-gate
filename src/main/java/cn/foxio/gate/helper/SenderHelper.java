@@ -51,7 +51,7 @@ public class SenderHelper {
 	
 	
 	/**
-	 * key值可以使用 {@link cn.foxio.gate.global.ServerName ServerName}
+	 * key值可以使用 {@link cn.foxio.simple.config.global.ServerName ServerName}
 	 * @param key
 	 * @return
 	 */

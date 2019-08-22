@@ -1,4 +1,4 @@
-package cn.foxio.simple;
+package cn.foxio.simple.config;
 
 import java.util.Scanner;
 

@@ -22,7 +22,7 @@ import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 
-import cn.foxio.simple.GlobalConfig;
+import cn.foxio.simple.config.GlobalConfig;
 
 
 /**

@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import cn.foxio.gate.face.IFoxAccepter;
 import cn.foxio.gate.tcp.data.InnerMessage;
@@ -24,11 +25,17 @@ public class SubService extends SubServiceBase {
 	private ArrayList<SocketAddress> addresList = new ArrayList<>();
 	
 	private IFoxAccepter<InnerMessage> accepter;
+	
+	//全部的网关国庆列表
+	//@Value("${gate.socket.inside.list}")
+	private String gatewayList;
 
 
-	public SubService(IFoxAccepter<InnerMessage> accepter) {
+
+	public SubService(IFoxAccepter<InnerMessage> accepter , String gatewayList) {
 
 		this.accepter = accepter;
+		this.gatewayList = gatewayList;
 		reloadGatewayList(null);
 	}
 	
@@ -57,9 +64,6 @@ public class SubService extends SubServiceBase {
 		current = task;
 	}
 	
-	//全部的网关国庆列表
-	@Value("${gate.socket.inside.list}")
-	private String gatewayList;
 
 	/**
 	 * 载入
