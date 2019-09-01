@@ -8,6 +8,11 @@ import org.quartz.JobExecutionException;
 
 import lombok.Data;
 
+/**
+ * 时间任务
+ * @author lucky
+ *
+ */
 @Data
 public class TimeTask implements Job {
 
@@ -19,12 +24,14 @@ public class TimeTask implements Job {
 	 * 回调
 	 */
 	private Consumer<Object> callBack;
-	
+	/**
+	 * id
+	 */
 	private int id;
 
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 
-		System.out.println("param:" + param);
+		//System.out.println("TimeTask id = "+id+", param:" + GsonUtil.toJson(param));
 
 		if (callBack != null) {
 			callBack.accept(param);

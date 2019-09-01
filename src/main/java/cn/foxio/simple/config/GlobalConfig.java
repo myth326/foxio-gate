@@ -31,6 +31,7 @@ public class GlobalConfig {
 			 Scanner xx = new Scanner( System.in );
 		        System.out.print("当前配置为   【生产】 环境！！！， 继续请输入 [y] ");
 		        String value = xx.next();
+		        xx.close();
 		        if ( "y".equals(value)) {
 		        	return v;
 		        }else {

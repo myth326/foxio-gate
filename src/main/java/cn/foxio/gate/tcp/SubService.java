@@ -2,6 +2,8 @@ package cn.foxio.gate.tcp;
 
 import java.util.ArrayList;
 
+import org.quartz.JobDataMap;
+
 import cn.foxio.gate.face.IFoxAccepter;
 import cn.foxio.gate.tcp.data.InnerMessage;
 import cn.foxio.gate.tcp.data.SocketAddress;
@@ -41,17 +43,17 @@ public class SubService extends SubServiceBase {
 		clientList.add(client);
 	}
 
-	private int taskId;
+	private JobDataMap jobDataMap;
 
 	private void addTask() {
 		
 		int dealy = 1000 * 30;
 		
-		TimeTaskManager.getInstance().removeJob(taskId);
+		TimeTaskManager.getInstance().removeTask(jobDataMap);
 
-		taskId = TimeTaskManager.getInstance().addTask(obj -> {
+		jobDataMap = TimeTaskManager.getInstance().addTask(obj -> {
 			reloadGatewayList(obj);
-			taskId = -1;
+			jobDataMap = null;
 		}, new Object(), dealy );
 		
 		

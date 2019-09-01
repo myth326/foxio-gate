@@ -8,6 +8,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
+import org.quartz.JobDataMap;
 
 import cn.foxio.gate.def.MessageTypeDef;
 import cn.foxio.gate.face.ICallBack;
@@ -63,18 +64,17 @@ public class FoxTcpService implements IChannelContainer {
 		createServer(null);
 	}
 	
-	private int taskId;
+	private JobDataMap jobDataMap;
 	
 	private void addTimeTask() {
 		
 		
 		int dealy = 2 * 1000;
 		
-		TimeTaskManager.getInstance().removeJob(taskId);
+		TimeTaskManager.getInstance().removeTask(jobDataMap);
 
-		taskId = TimeTaskManager.getInstance().addTask(obj -> {
+		jobDataMap = TimeTaskManager.getInstance().addTask(obj -> {
 			createServer(obj);
-			taskId = -1;
 		}, new Object(), dealy );
 		
 		
