@@ -85,19 +85,22 @@ public class FoxGateway {
 	                        	ch.pipeline().addLast("frameDecoder", new FoxNettyDecoder());  
 	                        	ch.pipeline().addLast("frameEncoder", new FoxNettyEncoder()); 
 	                            
-	                            if(ch.localAddress().getPort() == port1){
+	                            if(ch.localAddress().getPort() == port2){
 	                            	FoxGatewayOutsideHandler hdl = new FoxGatewayOutsideHandler( accepter );
 	                                ch.pipeline().addLast(hdl);
 	                            }else{
 	                                ch.pipeline().addLast(new FoxGatewayInsideHandler( accepter ));
+	                                
 	                            }
 
 	                        };
 	                        
 	                    });
 	             // 绑定端口，开始接收进来的连接
-	             ChannelFuture future1 = sbs.bind(port1).sync();  
-	             ChannelFuture future2 = sbs.bind(port2).sync();
+	             //ChannelFuture future1 = sbs.bind(port1).sync();  
+	             //ChannelFuture future2 = sbs.bind(port2).sync();
+	             sbs.bind(port1).sync();  
+	             sbs.bind(port2).sync();
 	             
 	             System.out.println("Server start listen at port1 = " + port1 + ",port2 = " + port2 );
 	             

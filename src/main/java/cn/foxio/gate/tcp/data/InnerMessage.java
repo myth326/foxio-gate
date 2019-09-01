@@ -118,14 +118,13 @@ public class InnerMessage implements IMessageBox {
 
 	@Override
 	public int getType() {
-		// TODO Auto-generated method stub
-		return 0;
+		return type;
 	}
 
 	@Override
 	public IMessageBox setType(int type) {
-		// TODO Auto-generated method stub
-		return null;
+		this.type = type;
+		return this;
 	}
 
 	

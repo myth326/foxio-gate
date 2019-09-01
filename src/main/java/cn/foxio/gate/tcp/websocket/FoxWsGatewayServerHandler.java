@@ -45,7 +45,7 @@ public class FoxWsGatewayServerHandler extends SimpleChannelInboundHandler<Objec
 
 
 	
-    private  byte [] HEARTBEAT_SEQUENCE = new HeartbeatData().toByteArrays();
+    private  byte [] HEARTBEAT_SEQUENCE = new byte[1];
 
     
 	
@@ -55,6 +55,7 @@ public class FoxWsGatewayServerHandler extends SimpleChannelInboundHandler<Objec
 	private WebSocketServerHandshaker handshaker;
 
 	public FoxWsGatewayServerHandler() {
+		HEARTBEAT_SEQUENCE = new HeartbeatData().toByteArrays();
 	}
 
 	public FoxWsGatewayServerHandler(FoxGatewayAccepter accepter) {
@@ -122,6 +123,8 @@ public class FoxWsGatewayServerHandler extends SimpleChannelInboundHandler<Objec
 		} else {
 			System.out.println("创建连接但， " + getClass().getSimpleName() + " ctx.channel().remoteAddress() = null ");
 		}
+		
+		NettyUtils.sendMsgToCtx(ctx, HEARTBEAT_SEQUENCE, 0);
 
 	}
 
@@ -228,6 +231,9 @@ public class FoxWsGatewayServerHandler extends SimpleChannelInboundHandler<Objec
 		} else {
 			handshaker.handshake(ctx.channel(), req);
 			String key = req.headers().get("Host");
+			
+			//byte o = req.content().readByte();
+			
 			NettyUtils.setKey(ctx, key);
 		}
 	}

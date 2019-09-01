@@ -19,6 +19,8 @@ public class Task implements Job {
 	 * 回调
 	 */
 	private Consumer<Object> callBack;
+	
+	private int id;
 
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 

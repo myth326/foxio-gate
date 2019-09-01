@@ -77,7 +77,7 @@ public class SubService extends SubServiceBase {
 		for (String item : list) {
 			String[] v = item.split(":");
 			SocketAddress address = new SocketAddress(v[0], Integer.valueOf(v[1]));
-			address.setPort(address.getPort() -100 );
+			address.setPort(address.getPort());
 
 			if (!checkInAddresList(address)) {
 				// 有加入新的路由;

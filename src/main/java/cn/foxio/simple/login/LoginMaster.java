@@ -4,9 +4,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 
+
 import cn.foxio.gate.def.GatewayDef;
 import cn.foxio.gate.face.AbstractAccepter;
 import cn.foxio.gate.tcp.data.InnerMessage;
+import cn.foxio.gate.tools.LoggerUtil;
 import cn.foxio.simple.config.ServerName;
 
 /**
@@ -25,7 +27,6 @@ public class LoginMaster extends AbstractAccepter<InnerMessage> {
 	
 
 	public LoginMaster() {
-
 		super("LoginMaster");
 		initThread();
 		this.start();
@@ -104,6 +105,17 @@ public class LoginMaster extends AbstractAccepter<InnerMessage> {
 		}
 		
 		
+
+		userId = msg.getUserId();
+		LoginSlave actor = autoGetAccountActor(userId);
+
+		if (actor != null) {
+			actor.acceptMsg(msg, null);
+		} else {
+			getLogger().warn(" LoginMaster.handlerMsg 有一条消息没有处理！");
+		}
+		
+		
 		return true;
 	}
 	
@@ -121,11 +133,11 @@ public class LoginMaster extends AbstractAccepter<InnerMessage> {
 	private void logDownLine(long userId) {
 		
 	}
+	
 
 	@Override
 	protected Logger getLogger() {
-		// TODO Auto-generated method stub
-		return null;
+		return LoggerUtil.getLoggerByName("LoginMaster");
 	}
 	
 	

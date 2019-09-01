@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import cn.foxio.gate.def.GatewayDef;
 import cn.foxio.gate.helper.SenderHelper;
 import cn.foxio.gate.tcp.SubService;
+import cn.foxio.simple.config.ServerName;
 
 /**
  * 登陆服务器
@@ -31,7 +32,7 @@ public class LoginServer {
 		SubService loginService = new SubService(new LoginMaster() , gatewayList);
 		loginService.addSubscribe(3);
 		loginService.addSubscribe(GatewayDef.CLIENT_OFF_LINE);
-		SenderHelper.register(cn.foxio.simple.config.ServerName.LOGIN_KEY, loginService);
+		SenderHelper.register(ServerName.LOGIN_KEY, loginService);
 	}
 
 
