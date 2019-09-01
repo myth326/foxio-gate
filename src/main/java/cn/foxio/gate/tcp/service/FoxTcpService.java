@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 import org.apache.log4j.Logger;
 
@@ -18,11 +17,10 @@ import cn.foxio.gate.face.IMessageBox;
 import cn.foxio.gate.tcp.SubServiceBase;
 import cn.foxio.gate.tcp.data.InnerMessage;
 import cn.foxio.gate.tcp.gateway.FoxGatewayOutsideHandler;
-import cn.foxio.gate.tools.CronJobManager;
-import cn.foxio.gate.tools.CronJobManager.CountDownTask;
 import cn.foxio.gate.tools.FoxProtobufUtils;
 import cn.foxio.gate.tools.NettyUtils;
 import cn.foxio.gate.tools.ReconnectTask;
+import cn.foxio.gate.tools.TimeTaskManager;
 import cn.foxio.gate.tools.TimeUtil;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -65,18 +63,21 @@ public class FoxTcpService implements IChannelContainer {
 		createServer(null);
 	}
 	
-	private CountDownTask timerTask;
+	private int taskId;
 	
 	private void addTimeTask() {
-		if ( timerTask != null ) {
-			CronJobManager.getInstance().removeJob(timerTask.getId());
-		}
+		
+		
 		int dealy = 2 * 1000;
-		Consumer<Object> call = obj -> {
+		
+		TimeTaskManager.getInstance().removeJob(taskId);
+
+		taskId = TimeTaskManager.getInstance().addTask(obj -> {
 			createServer(obj);
-		};
-		timerTask = new CountDownTask( dealy, 0, call);
-		CronJobManager.getInstance().addCountDownJob( "MQTcpService", "default", timerTask);
+			taskId = -1;
+		}, new Object(), dealy );
+		
+		
 	}
 	
 	protected FoxBaseTcpService client;

@@ -1,18 +1,12 @@
 package cn.foxio.gate.tcp;
 
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.function.Consumer;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import cn.foxio.gate.face.IFoxAccepter;
 import cn.foxio.gate.tcp.data.InnerMessage;
 import cn.foxio.gate.tcp.data.SocketAddress;
 import cn.foxio.gate.tcp.service.FoxTcpService;
-import cn.foxio.gate.tools.CronJobManager;
-import cn.foxio.gate.tools.CronJobManager.CountDownTask;
+import cn.foxio.gate.tools.TimeTaskManager;
 
 /**
  * 子服务器
@@ -47,21 +41,20 @@ public class SubService extends SubServiceBase {
 		clientList.add(client);
 	}
 
-	private CountDownTask current;
+	private int taskId;
 
 	private void addTask() {
-		if (current != null) {
-			return;
-		}
 		
-		Consumer<Object> call = obj -> {
+		int dealy = 1000 * 30;
+		
+		TimeTaskManager.getInstance().removeJob(taskId);
+
+		taskId = TimeTaskManager.getInstance().addTask(obj -> {
 			reloadGatewayList(obj);
-		};
-
-		CountDownTask task = new CountDownTask((long) 1000 * 30, new Object(), call);
-		CronJobManager.getInstance().addCountDownJob(task.getId() + "mqService", "reloadGatewayList" + new Random().nextInt(99999) , task);
-
-		current = task;
+			taskId = -1;
+		}, new Object(), dealy );
+		
+		
 	}
 	
 
@@ -87,7 +80,6 @@ public class SubService extends SubServiceBase {
 
 		}
 
-		current = null;
 		addTask();
 	}
 

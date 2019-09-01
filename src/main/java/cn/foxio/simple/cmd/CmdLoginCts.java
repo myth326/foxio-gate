@@ -30,7 +30,7 @@ public class CmdLoginCts implements IPlayerCommand<IMessageBox, LoginCtsMsg> {
 		stc.setToken(msg.getToken());
 		stc.setGold(11111);
 
-		long userId = 3000;
+		long userId = box.getUserId();
 
 		SimplePlayer player = new SimplePlayer();
 		player.setHeadPhotoId(1);

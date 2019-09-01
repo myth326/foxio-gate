@@ -9,7 +9,7 @@ import org.quartz.JobExecutionException;
 import lombok.Data;
 
 @Data
-public class Task implements Job {
+public class TimeTask implements Job {
 
 	/**
 	 * 回调参数

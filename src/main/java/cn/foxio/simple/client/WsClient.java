@@ -11,6 +11,9 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import cn.foxio.gate.face.IMessageBox;
 import cn.foxio.gate.tcp.data.OriginalPackage;
+import cn.foxio.gate.tools.FormatUtil;
+import cn.foxio.gate.tools.ProtoBufUtils;
+import cn.foxio.simple.cmd.LoginStcMsg;
 import cn.foxio.simple.msg.LoginCtsMsg;
  
 public class WsClient {
@@ -52,8 +55,16 @@ public class WsClient {
                 }
                 
                 @Override
-                public void onMessage(ByteBuffer bytes){
-                	System.out.println("收到消息=========="+bytes);
+                public void onMessage(ByteBuffer byteBuffer){
+                	
+                	byte[] bytes = new byte[ byteBuffer.limit() ];
+                	byteBuffer.get(bytes);
+                	
+                	OriginalPackage pack = new OriginalPackage();
+                	pack.readBytes(bytes);
+                	LoginStcMsg msg = ProtoBufUtils.decode(LoginStcMsg.class, pack.getProtoData());
+                	
+                	System.out.println("收到消息:\t\n"+ FormatUtil.formatJson(msg.toJson()));
                 }
  
                 @Override
