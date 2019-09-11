@@ -33,12 +33,15 @@ public class FoxGatewayOutsideHandler extends ChannelInboundHandlerAdapter {
 
 
 	private FoxGatewayAccepter accepter;
+	
+	private String gateKey;
 
 	public FoxGatewayOutsideHandler() {
 	}
 
-	public FoxGatewayOutsideHandler(FoxGatewayAccepter accepter) {
+	public FoxGatewayOutsideHandler(FoxGatewayAccepter accepter , String gateKey) {
 		this.accepter = accepter;
+		this.gateKey = gateKey;
 	}
 
 	@SuppressWarnings("unused")
@@ -51,7 +54,7 @@ public class FoxGatewayOutsideHandler extends ChannelInboundHandlerAdapter {
 		box.setCmdId(omsg.getCmdId());
 		box.setType(MessageTypeDef.ClientToService.getValue());
 		box.setCustomerId(NettyUtils.getCustomerId(ctx));
-		
+		box.setGate(gateKey);
 		//不是心跳
 		if (box.getCmdId() != MessageTypeDef.HeartBeat.getValue() ) {
 			

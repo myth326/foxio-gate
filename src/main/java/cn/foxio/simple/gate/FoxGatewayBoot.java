@@ -3,8 +3,10 @@ package cn.foxio.simple.gate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+
 import cn.foxio.gate.tcp.gateway.FoxGateway;
 import cn.foxio.gate.tcp.websocket.FoxWsGateway;
+import cn.foxio.gate.tools.ServerUtils;
 
 /**
  * 启动网关 包含 socket网关与websocket网关 其中 socket网关有两个端口,一个对内通讯,一个对外通讯; websocket对外通讯 ,
@@ -24,12 +26,23 @@ public class FoxGatewayBoot {
 
 	@Value("${gate.websocket.port}")
 	private int wsPort;
+	
+	//@Value("${gate.websocket.port}")
+	//private String host;
 
 	public FoxGatewayBoot() {
+	}
+	
+	
+	public FoxGatewayBoot( int insidePort,int outsidePort , int wsPort){
+		this.insidePort = insidePort;
+		this.outsidePort = outsidePort;
+		this.wsPort = wsPort;
 	}
 
 	public void start() {
 		
+		String host = ServerUtils.getLocalIp();
 		try {
 			// 启动socket网关
 			new FoxGateway(insidePort, outsidePort).start();

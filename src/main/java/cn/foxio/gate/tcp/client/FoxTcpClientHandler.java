@@ -30,6 +30,8 @@ public class FoxTcpClientHandler extends ChannelInboundHandlerAdapter {
 	private IFoxAccepter<InnerMessage> accepter;
 
 	private IChannelContainer client;
+	
+	private String gateKey;
 
 	public IChannelContainer getClient() {
 		return client;
@@ -39,8 +41,9 @@ public class FoxTcpClientHandler extends ChannelInboundHandlerAdapter {
 		this.client = client;
 	}
 
-	public FoxTcpClientHandler(IFoxAccepter<InnerMessage> accepter) {
+	public FoxTcpClientHandler(IFoxAccepter<InnerMessage> accepter , String gateKey ) {
 		this.accepter = accepter;
+		this.gateKey = gateKey;
 	}
 
 	public boolean isConnected() {
@@ -56,7 +59,7 @@ public class FoxTcpClientHandler extends ChannelInboundHandlerAdapter {
 				omsg.getProtoData());
 		box.setCmdId(omsg.getCmdId());
 		box.setCustomerId(NettyUtils.getCustomerId(ctx));
-
+		box.setGate(gateKey);
 		if (box.getCmdId() == MessageTypeDef.HeartBeat.getValue()) {
 			return;
 		}

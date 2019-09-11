@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+import cn.foxio.gate.tools.ServerUtils;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -27,12 +28,12 @@ public class FoxGateway {
 	
 	private Logger logger = Logger.getLogger(FoxGateway.class);
 
-
-	private int port1;
-	private int port2;
+	private String host;
+	private int insidePort;
+	private int outsidePort;
 
 	/** 用于分配处理业务线程的线程组个数 */
-	protected int bizGroupSize = Runtime.getRuntime().availableProcessors() * 2; 
+	protected int bizGroupSize = Runtime.getRuntime().availableProcessors(); 
 
 	/** 业务出现线程大小 */
 	protected int bizThreadSize = 4;
@@ -46,14 +47,15 @@ public class FoxGateway {
 	
 
 	/**
-	 * 创建一个网关消息队列
+	 * 创建一个网关消息队列, outsidePort
 	 * @param ip
 	 * @param port
 	 */
-	public FoxGateway(int port1, int port2 ) {
-		this.port1 = port1;
-		this.port2 = port2;
-		//System.out.println(String.format("Create Gateway ip = {%s} socket client {%s};  inner server {%s}", "", port1 , port2));
+	public FoxGateway(int insidePort, int outsidePort ) {
+		this.host = ServerUtils.getLocalIp();
+		this.insidePort = insidePort;
+		this.outsidePort = outsidePort;
+		//System.out.println(String.format("Create Gateway ip = {%s} socket client {%s};  inner server {%s}", "", insidePort , outsidePort));
 	}
 	
 
@@ -68,8 +70,8 @@ public class FoxGateway {
 	        EventLoopGroup workerGroup = new NioEventLoopGroup();
 	        try {
 	            ServerBootstrap sbs = new ServerBootstrap().group(bossGroup,workerGroup)
-	            		.channel(NioServerSocketChannel.class).localAddress(new InetSocketAddress(port1))
-	            		//.channel(NioServerSocketChannel.class).localAddress(new InetSocketAddress(port2))
+	            		.channel(NioServerSocketChannel.class).localAddress(new InetSocketAddress(insidePort))
+	            		//.channel(NioServerSocketChannel.class).localAddress(new InetSocketAddress(outsidePort))
 	                    .childHandler(new ChannelInitializer<SocketChannel>() {
 	                    	// 读超时
 	                        private static final int READ_IDEL_TIME_OUT = 30; 
@@ -85,11 +87,11 @@ public class FoxGateway {
 	                        	ch.pipeline().addLast("frameDecoder", new FoxNettyDecoder());  
 	                        	ch.pipeline().addLast("frameEncoder", new FoxNettyEncoder()); 
 	                            
-	                            if(ch.localAddress().getPort() == port2){
-	                            	FoxGatewayOutsideHandler hdl = new FoxGatewayOutsideHandler( accepter );
+	                            if(ch.localAddress().getPort() == outsidePort){
+	                            	FoxGatewayOutsideHandler hdl = new FoxGatewayOutsideHandler( accepter , host + ":" + outsidePort );
 	                                ch.pipeline().addLast(hdl);
 	                            }else{
-	                                ch.pipeline().addLast(new FoxGatewayInsideHandler( accepter ));
+	                                ch.pipeline().addLast(new FoxGatewayInsideHandler( accepter , host + ":" + insidePort));
 	                                
 	                            }
 
@@ -97,12 +99,12 @@ public class FoxGateway {
 	                        
 	                    });
 	             // 绑定端口，开始接收进来的连接
-	             //ChannelFuture future1 = sbs.bind(port1).sync();  
-	             //ChannelFuture future2 = sbs.bind(port2).sync();
-	             sbs.bind(port1).sync();  
-	             sbs.bind(port2).sync();
+	             //ChannelFuture future1 = sbs.bind(insidePort).sync();  
+	             //ChannelFuture future2 = sbs.bind(outsidePort).sync();
+	             sbs.bind(insidePort).sync();  
+	             sbs.bind(outsidePort).sync();
 	             
-	             System.out.println("Server start listen at port1 = " + port1 + ",port2 = " + port2 );
+	             System.out.println("Server start listen at insidePort = " + insidePort + ",outsidePort = " + outsidePort );
 	             
 	             logger.info(" 服务器已启动");
 	             //future.channel().closeFuture().sync();
@@ -119,22 +121,22 @@ public class FoxGateway {
 		bossGroup.shutdownGracefully();
 	}
 
-	public int getPort1() {
-		return port1;
+	public int getInsidePort() {
+		return insidePort;
 	}
-	public int getPort2() {
-		return port2;
-	}
-
-
-	public void setPort1(int port1) {
-		this.port1 = port1;
+	public int getOutsidePort() {
+		return outsidePort;
 	}
 
 
-	public void setPort2(int port2) {
-		this.port2 = port2;
-	}
+//	public void setInsidePort(int insidePort) {
+//		this.insidePort = insidePort;
+//	}
+//
+//
+//	public void setOutsidePort(int outsidePort) {
+//		this.outsidePort = outsidePort;
+//	}
 	
 
 }

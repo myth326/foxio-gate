@@ -45,7 +45,7 @@ public class InnerMessage implements IMessageBox {
 	
 	@Protobuf(order = 5  , fieldType = FieldType.STRING )
 	/**
-	 * ip:port
+	 * client ip:port
 	 */
 	protected String key;
 	/**
@@ -66,9 +66,16 @@ public class InnerMessage implements IMessageBox {
 	protected String gameId;
 	
 	/**
+	 * 网关
+	 */
+	@Protobuf( order = 9 , fieldType = FieldType.STRING )
+	protected String gate;
+	
+	
+	/**
 	 * 商户ID
 	 */
-	@Protobuf( order = 9 , fieldType = FieldType.INT32 )
+	@Protobuf( order = 10 , fieldType = FieldType.INT32 )
 	protected int customerId;
 
 	public InnerMessage() {

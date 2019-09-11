@@ -37,12 +37,15 @@ public class FoxGatewayInsideHandler extends ChannelInboundHandlerAdapter {
 					new HeartbeatData().toByteArrays()).setType(MessageTypeDef.HeartBeat.getValue()));
 
 	private FoxGatewayAccepter accepter;
+	
+	private String gateKey;
 
 	public FoxGatewayInsideHandler() {
 	}
 
-	public FoxGatewayInsideHandler(FoxGatewayAccepter accepter) {
+	public FoxGatewayInsideHandler(FoxGatewayAccepter accepter , String gateKey) {
 		this.accepter = accepter;
+		this.gateKey = gateKey;
 	}
 
 	@Override
@@ -63,6 +66,8 @@ public class FoxGatewayInsideHandler extends ChannelInboundHandlerAdapter {
 				String key = NettyUtils.autoKey(ctx);
 				//logger.info("gateway 收到消息! " + key + " msg = " + box);
 				box.setKey(key);
+				box.setCustomerId(NettyUtils.getCustomerId(ctx));
+				box.setGate(gateKey);
 				accepter.acceptMsg(box, ctx);
 			} else {
 				// System.out.println("收到心跳并回复" + NettyUtils.getKey(ctx) +" , uid = "+

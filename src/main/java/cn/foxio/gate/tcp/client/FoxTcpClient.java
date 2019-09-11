@@ -63,7 +63,7 @@ public class FoxTcpClient implements IChannelContainer {
 
 		message = String.format(message, host, port);
 		logger.info(message);
-		FoxTcpClientHandler hdl = new FoxTcpClientHandler(accepter);
+		FoxTcpClientHandler hdl = new FoxTcpClientHandler(accepter , host+":"+port);
 		client = new BaseTcpClient(host, port, hdl, container);
 
 	}

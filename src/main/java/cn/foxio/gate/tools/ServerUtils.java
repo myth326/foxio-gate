@@ -1,8 +1,11 @@
 package cn.foxio.gate.tools;
 
+import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -30,7 +33,32 @@ import io.netty.handler.codec.bytes.ByteArrayEncoder;
 public class ServerUtils {
 
 	
-	
+	 /*** 
+     *  检测对应host/port是否有 socket servers 存在 [用客户端能连上]
+     * @param host 
+     * @param port 
+     * @throws UnknownHostException  
+     */  
+    @SuppressWarnings("resource")
+	public static boolean isPortUsing(String host,int port) {  
+        boolean flag = false;  
+        try {  
+        	InetAddress address = InetAddress.getByName(host);  
+            new Socket(address,port);  
+            flag = true;  
+        } catch (IOException e) {  
+              
+        }  
+        return flag;  
+    }
+    
+    public static void main(String[] args) {
+		
+    	boolean b = isPortUsing("127.0.0.1", 8000);
+    	System.out.println( b);
+    	
+	}
+    
 	/**
 	 * 检测对应host/port是否有 socket servers 存在 [用客户端能连上]
 	 * @param host

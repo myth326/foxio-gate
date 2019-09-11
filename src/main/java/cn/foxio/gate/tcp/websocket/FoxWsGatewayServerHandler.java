@@ -11,6 +11,7 @@ import cn.foxio.gate.tcp.data.InnerMessage;
 import cn.foxio.gate.tcp.data.OriginalPackage;
 import cn.foxio.gate.tcp.gateway.FoxGatewayAccepter;
 import cn.foxio.gate.tools.NettyUtils;
+import cn.foxio.gate.tools.ServerUtils;
 import cn.foxio.gate.tools.TimeUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -42,17 +43,15 @@ import io.netty.util.CharsetUtil;
 public class FoxWsGatewayServerHandler extends SimpleChannelInboundHandler<Object> {
 
 	private Logger logger = Logger.getLogger(FoxWsGatewayServerHandler.class);
-
-
 	
     private  byte [] HEARTBEAT_SEQUENCE = new byte[1];
 
-    
-	
 
 	private FoxGatewayAccepter accepter;
 
 	private WebSocketServerHandshaker handshaker;
+	
+	private String gateKey;
 
 	public FoxWsGatewayServerHandler() {
 		HEARTBEAT_SEQUENCE = new HeartbeatData().toByteArrays();
@@ -60,7 +59,9 @@ public class FoxWsGatewayServerHandler extends SimpleChannelInboundHandler<Objec
 
 	public FoxWsGatewayServerHandler(FoxGatewayAccepter accepter) {
 		this.accepter = accepter;
+		this.gateKey = ServerUtils.getLocalIp();
 	}
+
 	
 	@Override
 	public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
@@ -188,6 +189,7 @@ public class FoxWsGatewayServerHandler extends SimpleChannelInboundHandler<Objec
 		box.setCmdId(omsg.getCmdId());
 		box.setType(MessageTypeDef.ClientToService.getValue());
 		box.setCustomerId(NettyUtils.getCustomerId(ctx));
+		box.setGate(gateKey);
 		
 		if (box.getCmdId() != MessageTypeDef.HeartBeat.getValue() ) {
 			

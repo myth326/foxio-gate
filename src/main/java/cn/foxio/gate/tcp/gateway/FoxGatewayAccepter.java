@@ -29,9 +29,12 @@ public class FoxGatewayAccepter extends AbstractGateAccepter {
 	 * 订阅辅助器
 	 */
 	private FoxSubscribeHelper helper = null;
+	
+	private String gateKey;
 
 	public FoxGatewayAccepter() {
 		this.helper = FoxSubscribeHelper.getIstance();
+		//this.gateKey = gateKey;
 		
 	}
 	
@@ -176,6 +179,7 @@ public class FoxGatewayAccepter extends AbstractGateAccepter {
 				InnerMessage msg = new InnerMessage(GatewayDef.CLIENT_OFF_LINE, tableId, null);
 				msg.setUserId(uid);
 				msg.setCustomerId(NettyUtils.getCustomerId(ctx));
+				//msg.setGate(gateKey);
 				helper.sendCloseToAllService(msg, NettyUtils.getServerMap());
 			}
 		}

@@ -110,6 +110,11 @@ public class TimeTaskManager {
 	 * @throws SchedulerException
 	 */
 	public void removeTask(JobDataMap jobDataMap) {
+		
+		if ( jobDataMap == null){
+			return;
+		}
+		
 		String jobName = jobDataMap.getString("jobName");
 		String groupName = jobDataMap.getString("groupName");
 		TriggerKey triggerKey = TriggerKey.triggerKey(jobName, groupName);

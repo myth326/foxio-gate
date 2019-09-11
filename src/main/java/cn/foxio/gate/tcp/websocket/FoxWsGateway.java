@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 
 import cn.foxio.gate.tcp.gateway.FoxGatewayAccepter;
+import cn.foxio.gate.tools.ServerUtils;
 import cn.foxio.gate.tools.TimeUtil;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -82,7 +83,6 @@ public class FoxWsGateway {
 					pipeline.addLast("http-codec", new HttpServerCodec());
 					pipeline.addLast("aggregator", new HttpObjectAggregator(65536));
 					pipeline.addLast("http-chunked", new ChunkedWriteHandler());
-
 					pipeline.addLast("handler", new FoxWsGatewayServerHandler(accepter));
 				}
 			});
