@@ -1,5 +1,5 @@
 # foxio-gate
-一个基于netty的tcp网关. 整合springBoot,支持socket/websocket. 分布式集群游戏框架.<br/>
+一个基于netty的tcp网关. 整合springBoot,通讯采用protobuf3.0 ,支持socket/websocket. 分布式集群游戏框架.<br/>
 
 
 环境要求： jdk1.8+ 注意不能用 jre <br/>
@@ -14,7 +14,8 @@
 	6 订阅主题分两个标识，main + sub ，以便于精细化的订阅发布<br/>
 
 <br/>
+foxio-frameworks 稍后开源
 <br/>
 <br/>
 
-联系  yuzhonga@qq.com 吉祥<br/>
+联系  yuzhonga@qq.com lucky<br/>
